@@ -177,6 +177,22 @@ pub fn dotenv_overwrite() -> Result<PathBuf> {
     Ok(path)
 }
 
+/// Like `from_filename`, but overwrites existing env vars.
+///
+/// # Examples
+/// ```
+/// // Load default settings.
+/// dotenv::overwrite_from_filename(".env").ok();
+///
+/// // Load override defaults with test-specific settings.
+/// dotenv::overwrite_from_filename(".env.test").ok();
+/// ```
+pub fn overwrite_from_filename<P: AsRef<Path>>(filename: P) -> Result<PathBuf> {
+    let (path, iter) = Finder::new().filename(filename.as_ref()).find()?;
+    iter.load_overwrite()?;
+    Ok(path)
+}
+
 /// Like `dotenv`, but returns an iterator over variables instead of loading into environment.
 ///
 /// # Examples
